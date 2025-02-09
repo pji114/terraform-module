@@ -1,3 +1,3 @@
-module "computing-vpc" {
-  source = "../../aws/vpc"
+module "pji-eks" {
+  source = "../../aws/eks"
 }
