@@ -2,7 +2,6 @@ locals {
   vpc-cidr              = var.vpc-cidr
   vpc-name              = var.vpc-name
   subnets               = var.subnets
-
 }
 
 resource "aws_vpc" "main_vpc" {
@@ -13,6 +12,7 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
+# 서브넷 생성 (public/private)
 resource "aws_subnet" "subnets" {
   for_each = local.subnets
   vpc_id = aws_vpc.main_vpc.id
@@ -52,7 +52,7 @@ resource "aws_route_table" "public_rt" {
 
 # 퍼블릭 서브넷을 퍼블릭 라우트 테이블에 연결
 resource "aws_route_table_association" "public_assoc" {
-  for_each = { for k, v in var.subnets : k => v if v.subnet_type == "public" }
+  for_each = { for k, v in local.subnets : k => v if v.subnet_type == "public" }
 
   subnet_id      = aws_subnet.subnets[each.key].id
   route_table_id = aws_route_table.public_rt.id
@@ -75,7 +75,7 @@ resource "aws_route_table" "private_rt" {
 
 # 프라이빗 서브넷을 프라이빗 라우트 테이블에 연결
 resource "aws_route_table_association" "private_assoc" {
-  for_each = { for k, v in var.subnets : k => v if v.subnet_type == "private" }
+  for_each = { for k, v in local.subnets : k => v if v.subnet_type == "private" }
 
   subnet_id      = aws_subnet.subnets[each.key].id
   route_table_id = aws_route_table.private_rt.id

@@ -13,3 +13,4 @@ variable "subnets" {
     subnet_type = string
   }))
 }
+
