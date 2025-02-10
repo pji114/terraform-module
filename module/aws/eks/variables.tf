@@ -12,8 +12,14 @@ variable "private_subnets" {
   type        = list(string)
 }
 
+variable "public_subnets" {
+  description = "List of public subnets for EKS worker nodes"
+  type        = list(string)
+}
+
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
   default     = "my-eks-cluster"
 }
+
