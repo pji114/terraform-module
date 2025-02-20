@@ -42,9 +42,12 @@ resource "aws_iam_policy" "ecr_access" {
     ]
   })
 }
+data "aws_iam_role" "eks_ecr_access"{
+  name = "${local.cluster_name}-eks-worker-role"
+}
 
 # EKS 노드 IAM 역할에 ECR 접근 정책 부여
 resource "aws_iam_role_policy_attachment" "eks_ecr_access" {
   policy_arn = aws_iam_policy.ecr_access.arn
-  role       = aws_iam_role.eks_worker_role.name  # 기존 EKS Worker Role 사용
+  role       = data.aws_iam_role.eks_ecr_access.name
 }
